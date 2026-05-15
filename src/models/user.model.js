@@ -8,24 +8,33 @@ export default (sequelize) => {
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        primaryKey: true,
+        primaryKey: true
       },
       fullName: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      role: {
+        type: DataTypes.ENUM({
+          values: ['admin', 'user']
+        })
+      }
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "user",
+      tableName: "users",
+      underscored: true,
+      updatedAt: false,
     }
   );
 

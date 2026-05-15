@@ -8,15 +8,25 @@ const port = 3000
 
 try {
     await db.sequelize.authenticate();
-    console.log('DB connection successful!');
+    console.log("Database connection successful!");
 
-    await db.sequelize.sync()
-    console.log('Models Synchronized!');
+    await db.sequelize.sync(); 
+    console.log("Models synchronized.");
 
-} catch (err){
-    console.error('Unable to connect to database: ', err);
-    
+    /* const joao = db.users.create({
+        fullName: 'João', 
+        email: 'joao@email.com', 
+        password: '12345', 
+        role: 'user'
+    });
+
+    console.log("Is instance of model?", joao instanceof db.users); 
+    console.log("User name:", joao.fullName);  */
+
+} catch (error) {
+    console.error("Initialization failed:", error);
 }
+
 
 app.get("/", (req, res) =>{
     res.send('API is running')
