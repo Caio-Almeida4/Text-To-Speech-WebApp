@@ -15,7 +15,7 @@ export default (sequelize) => {
         allowNull: false,
         field: 'user_id',
         references: {
-          model: 'user', 
+          model: 'users', 
           key: 'id'
         },
         onDelete: 'CASCADE' 
@@ -25,7 +25,7 @@ export default (sequelize) => {
         allowNull: false,
         field: 'audiobook_id',
         references: {
-          model: 'audiobook', 
+          model: 'audiobooks', 
           key: 'id'
         },
         onDelete: 'CASCADE' 
@@ -39,7 +39,7 @@ export default (sequelize) => {
     },
     {
       sequelize,
-      modelName: "Permission",
+      modelName: "permission",
       tableName: "permissions",
       underscored: true,
       timestamps: false

@@ -15,7 +15,7 @@ export default (sequelize) => {
         allowNull: false,
         field: 'audiobook_id',
         references: {
-            model: 'Audiobook',
+            model: 'audiobooks',
             key: 'id'
         },
         onDelete: 'CASCADE'
