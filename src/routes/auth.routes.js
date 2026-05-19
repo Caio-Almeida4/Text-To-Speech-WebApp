@@ -1,10 +1,9 @@
 import { Router } from "express";
 import { validateRegister } from '../middlewares/auth.validator.js'
+import { register } from "../controllers/auth.controller.js"
 
 const router = Router()
 
-router.post("/register", validateRegister ,(req,res) =>{  
-    res.status(200).json({message: "Registro feito com sucesso!"})
-})
+router.post("/register", validateRegister , register)
 
 export default router
