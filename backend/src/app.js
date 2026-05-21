@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 
 import db from './models/index.js'
 import authRoutes from './routes/auth.routes.js'
@@ -11,25 +12,13 @@ try {
     await db.sequelize.sync(); 
     console.log("Models synchronized.");
 
-     /*const joao = db.users.create({
-        fullName: 'João', 
-        email: 'joao@email.com', 
-        password: '12345', 
-        role: 'user'
-    });
-
-    console.log("Is instance of model?", joao instanceof db.users); 
-    console.log("User name:", joao.fullName);  
-    */
-
 } catch (error) {
     console.error("Initialization failed:", error);
 }
 
 const app = express()
 app.use(express.json())
-
-
+app.use(cors())
 
 app.use("/api/auth", authRoutes)
 
@@ -38,10 +27,8 @@ app.get("/", (req, res) =>{
 })
 
 
-
 const port = 3000
 
 app.listen(port, () =>{
     console.log(`Running on localhost:${port}`);
-    
 })

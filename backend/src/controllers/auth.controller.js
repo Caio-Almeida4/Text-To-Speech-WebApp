@@ -62,3 +62,23 @@ export const login = async (req, res) => {
     }
 
 }
+
+export const getMe = async (req, res) => {
+    try {
+        const user = await db.users.findOne({ where: { id: req.user.id } });
+
+        if (!user) {
+            return res.status(404).json({ message: "Usuário não encontrado." });
+        }
+
+        res.status(200).json({ 
+            id: user.id,
+            fullName: user.fullName,
+            email: user.email,
+            role: user.role
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: "Erro interno no servidor." });
+    }
+};

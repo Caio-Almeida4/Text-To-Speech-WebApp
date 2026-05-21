@@ -1,0 +1,71 @@
+/* 1. Reset Básico e Fonte */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 2. Fundo e Centralização Mágica */
+body {
+    background-color: #f0f2f5; /* Um cinza azulado bem suave */
+    height: 100vh; /* Ocupa 100% da altura da tela */
+    display: flex;
+    justify-content: center; /* Centraliza na horizontal */
+    align-items: center; /* Centraliza na vertical */
+}
+
+/* 3. O Cartão do Formulário */
+form {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px; /* Deixa as quinas redondinhas */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Sombra elegante */
+    width: 100%;
+    max-width: 400px; /* Impede que o form fique gigante em telas grandes */
+    display: flex;
+    flex-direction: column; /* Coloca um campo embaixo do outro */
+    gap: 20px; /* Dá um respiro entre os campos */
+}
+
+/* Estilo para os títulos dentro do form */
+form h2 {
+    text-align: center;
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+/* 4. Estilizando os Inputs (Campos de texto) */
+input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease; /* A transição suave que mencionei */
+    outline: none; /* Remove aquela borda azul feia padrão do navegador */
+}
+
+/* O efeito de "foco": quando o usuário clica dentro da caixa */
+input:focus {
+    border-color: #4a90e2; /* Uma cor azul vibrante */
+}
+
+/* 5. Estilizando o Botão */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4a90e2; /* Azul profissional */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Efeito quando o usuário passa o mouse por cima do botão */
+button:hover {
+    background-color: #357abd; /* Um azul um pouco mais escuro */
+}
