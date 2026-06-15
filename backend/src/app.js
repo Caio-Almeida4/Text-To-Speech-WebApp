@@ -1,34 +1,47 @@
-import express from 'express'
-import cors from 'cors'
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 
-import db from './models/index.js'
-import authRoutes from './routes/auth.routes.js'
+import db from "./models/index.js";
 
+import authRoutes from "./routes/auth.routes.js";
+import audiobookRoutes from "./routes/audiobook.routes.js";
 
-try {
-    await db.sequelize.authenticate();
-    console.log("Database connection successful!");
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-    await db.sequelize.sync(); 
-    console.log("Models synchronized.");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-} catch (error) {
-    console.error("Initialization failed:", error);
-}
+app.use(cors());
+app.use(express.json());
 
-const app = express()
-app.use(express.json())
-app.use(cors())
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+app.use("/audios", express.static(path.join(__dirname, "../audios")));
 
-app.use("/api/auth", authRoutes)
+app.use("/api/auth", authRoutes);
+app.use("/api/audiobooks", audiobookRoutes);
 
-app.get("/", (req, res) =>{
-    res.send('API is running')
-})
+app.use((req, res) => {
+    res.status(404).json({ message: "Rota não encontrada." });
+});
 
+const startServer = async () => {
+    try {
+        await db.sequelize.sync({ force: false });
+        console.log("Banco de dados sincronizado com sucesso.");
 
-const port = 3000
+        app.listen(PORT, () => {
+            console.log(`Servidor backend rodando perfeitamente na porta ${PORT}`);
+        });
+    } catch (error) {
+        console.error("Falha ao iniciar o servidor devido a erros no banco de dados:", error);
+        process.exit(1);
+    }
+};
 
-app.listen(port, () =>{
-    console.log(`Running on localhost:${port}`);
-})
+startServer();
+
+export default app;

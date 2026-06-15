@@ -3,7 +3,6 @@ const form = document.getElementById("registerForm");
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Captura dos dados
     const fullName = document.getElementById("fullName").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
@@ -27,7 +26,7 @@ form.addEventListener("submit", async (e) => {
         }
 
     } catch (error) {
-        console.error("Erro na requisição:", error)
+        console.error(error)
         alert("Não foi possível conectar ao servidor.")
     }
 });

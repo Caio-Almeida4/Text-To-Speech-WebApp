@@ -50,9 +50,9 @@ export const login = async (req, res) => {
         } 
 
         const token = jwt.sign(
-            {id: user.id, role: user.role},
-            "chave_bem_secreta!",
-            { expiresIn: "1h"}
+            { id: user.id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
         )
 
         res.status(200).json({ message: "Login realizado com sucesso!", token})

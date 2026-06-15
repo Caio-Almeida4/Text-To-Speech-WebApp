@@ -1,20 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* CSS Adicional para o Player Fixo e Badges */
+        .audio-player { position: fixed; bottom: 0; left: 0; width: 100%; background: #333; color: #fff; padding: 15px; display: flex; align-items: center; gap: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.5); }
+        .audio-player audio { width: 100%; max-width: 500px; }
+        .badge { padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; color: white; }
+        .bg-pending { background-color: #f39c12; }
+        .bg-processing { background-color: #3498db; }
+        .bg-completed { background-color: #2ecc71; }
+        .bg-failed { background-color: #e74c3c; }
+        .admin-panel { margin-top: 20px; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    </style>
 </head>
-<body style="display: none">
+<body style="display: none; flex-direction: column; justify-content: flex-start; padding: 20px;">
 
-    
-    <h1 id="welcomeMessage">Carregando...</h1>
-
-    <div class="logoutDiv">
-        <button id="logoutBtn">Logout</button>
+    <div style="display: flex; justify-content: space-between; width: 100%; max-width: 800px; align-items: center;">
+        <h1 id="welcomeMessage">Carregando...</h1>
+        <button id="logoutBtn" style="width: auto;">Logout</button>
     </div>
 
-    <script src="js/dashboard.js" id="logoutBtn"></script>
+    <div id="adminPanel" class="admin-panel" style="display: none; width: 100%; max-width: 800px;">
+        <h2>Painel do Administrador - Upload de PDF</h2>
+        <form id="uploadForm">
+            <input type="file" id="pdfFiles" accept=".pdf" multiple required>
+            <button type="submit" style="margin-top: 10px;">Fazer Upload</button>
+            <progress id="uploadProgress" value="0" max="100" style="width: 100%; display: none; margin-top:10px;"></progress>
+        </form>
+    </div>
+
+    <div id="audiobookList" style="width: 100%; max-width: 800px; margin-top: 20px;">
+        <h2>Biblioteca de Audiobooks</h2>
+        <ul id="booksContainer" style="list-style: none; padding: 0;"></ul>
+    </div>
+
+    <div class="audio-player" id="audioPlayerContainer" style="display: none;">
+        <div id="nowPlaying">Nenhuma faixa selecionada</div>
+        <audio id="mainAudio" controls>
+            Seu navegador não suporta o elemento de áudio.
+        </audio>
+    </div>
+
+    <script src="js/dashboard.js"></script>
 </body>
 </html>

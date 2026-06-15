@@ -33,7 +33,7 @@ export default (sequelize) => {
       grantedAt: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW, 
+        defaultValue: DataTypes.NOW,
         field: 'granted_at'
       }
     },

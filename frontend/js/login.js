@@ -27,7 +27,7 @@ form.addEventListener("submit", async (e) => {
 
 
     } catch (error) {
-        console.error("Erro na requisição:", error)
+        console.error(error)
         alert("Não foi possível conectar ao servidor")
     }
 
