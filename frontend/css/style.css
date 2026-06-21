@@ -69,3 +69,19 @@ button {
 button:hover {
     background-color: #357abd; /* Um azul um pouco mais escuro */
 }
+
+.form-message {
+    font-size: 0.95rem;
+    min-height: 1.4rem;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    padding: 0 4px;
+}
+
+.form-message.success {
+    color: #1d7a3f;
+}
+
+.form-message.error {
+    color: #b02a37;
+}

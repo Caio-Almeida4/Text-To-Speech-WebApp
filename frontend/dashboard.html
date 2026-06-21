@@ -30,6 +30,31 @@
             <button type="submit" style="margin-top: 10px;">Fazer Upload</button>
             <progress id="uploadProgress" value="0" max="100" style="width: 100%; display: none; margin-top:10px;"></progress>
         </form>
+
+        <div id="permissionPanel" style="margin-top: 30px;">
+            <h3>Gerenciar Acesso a Audiobooks</h3>
+            <div id="permissionMessage" style="margin-bottom: 12px; color: #333;"></div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
+                <div style="flex: 1; min-width: 240px;">
+                    <label for="audiobookSelect">Audiobook</label><br>
+                    <select id="audiobookSelect" style="width: 100%; padding: 8px; margin-top: 6px;"></select>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-top: 16px;">
+                <div style="flex: 1; min-width: 240px;">
+                    <label for="userSearch">Buscar usuário</label><br>
+                    <input id="userSearch" type="text" placeholder="Nome ou e-mail" style="width: 100%; padding: 8px; margin-top: 6px;" />
+                </div>
+                <button id="toggleUsersBtn" type="button" style="flex: 0 0 auto; min-width: 150px; background: #3498db; color: white;">Ocultar lista</button>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;">
+                <button id="grantAccessBtn" type="button" style="flex: 1; min-width: 150px;">Conceder acesso</button>
+                <button id="revokeAccessBtn" type="button" style="flex: 1; min-width: 150px; background: #e74c3c; color: white;">Revogar acesso</button>
+            </div>
+            <div id="usersWrapper" style="margin-top: 16px; display: block;">
+                <div id="usersList" style="display: grid; gap: 6px;"></div>
+            </div>
+        </div>
     </div>
 
     <div id="audiobookList" style="width: 100%; max-width: 800px; margin-top: 20px;">

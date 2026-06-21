@@ -1,7 +1,15 @@
 const form = document.getElementById("loginForm")
+const loginMessage = document.getElementById("loginMessage")
+
+const setLoginMessage = (text, type) => {
+    loginMessage.textContent = text
+    loginMessage.className = `form-message ${type}`
+}
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault()
+    loginMessage.textContent = ""
+    loginMessage.className = "form-message"
 
     const email = document.getElementById("email").value
     const password = document.getElementById("password").value
@@ -19,16 +27,15 @@ form.addEventListener("submit", async (e) => {
 
         if (res.ok) {
             localStorage.setItem("jwToken", data.token)
-            alert(data.message)
             window.location.href = "dashboard.html"
         } else {
-            alert(data.message)
+            setLoginMessage(data.message, "error")
         }
 
 
     } catch (error) {
         console.error(error)
-        alert("Não foi possível conectar ao servidor")
+        setLoginMessage("Não foi possível conectar ao servidor", "error")
     }
 
 })

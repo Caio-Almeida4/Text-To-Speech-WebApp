@@ -29,12 +29,140 @@ export const uploadAudiobookFiles = async (req, res) => {
 
 export const getAllAudiobooks = async (req, res) => {
     try {
-        const books = await db.audiobooks.findAll({
-            include: [{ model: db.tracks }]
-        });
+        let books;
+
+        if (req.user.role === "admin") {
+            books = await db.audiobooks.findAll({
+                include: [{ model: db.tracks }]
+            });
+        } else {
+            books = await db.audiobooks.findAll({
+                include: [
+                    { model: db.tracks },
+                    {
+                        model: db.users,
+                        attributes: [],
+                        through: { attributes: [] },
+                        where: { id: req.user.id }
+                    }
+                ]
+            });
+        }
+
         res.status(200).json(books);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: "Erro ao buscar audiobooks." });
+    }
+};
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await db.users.findAll({
+            attributes: ["id", "fullName", "email", "role"]
+        });
+        res.status(200).json(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Erro ao buscar usuários." });
+    }
+};
+
+export const getAudiobookUsers = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const audiobook = await db.audiobooks.findByPk(id);
+
+        if (!audiobook) {
+            return res.status(404).json({ message: "Audiobook não encontrado." });
+        }
+
+        const users = await db.users.findAll({
+            attributes: ["id", "fullName", "email", "role"],
+            include: [
+                {
+                    model: db.audiobooks,
+                    attributes: ["id"],
+                    through: { attributes: [] },
+                    where: { id },
+                    required: false
+                }
+            ]
+        });
+
+        const usersWithAccess = users.map(user => ({
+            id: user.id,
+            fullName: user.fullName,
+            email: user.email,
+            role: user.role,
+            hasAccess: user.audiobooks && user.audiobooks.length > 0
+        }));
+
+        res.status(200).json(usersWithAccess);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Erro ao buscar usuários do audiobook." });
+    }
+};
+
+export const grantAudiobookAccess = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { userIds } = req.body;
+
+        if (!Array.isArray(userIds) || userIds.length === 0) {
+            return res.status(400).json({ message: "userIds deve ser um array não vazio." });
+        }
+
+        const audiobook = await db.audiobooks.findByPk(id);
+        if (!audiobook) {
+            return res.status(404).json({ message: "Audiobook não encontrado." });
+        }
+
+        const validUsers = await db.users.findAll({ where: { id: userIds } });
+        if (validUsers.length !== userIds.length) {
+            return res.status(400).json({ message: "Um ou mais usuários inválidos." });
+        }
+
+        await Promise.all(userIds.map(async (userId) => {
+            await db.permissions.findOrCreate({
+                where: { userId, audiobookId: id },
+                defaults: { userId, audiobookId: id }
+            });
+        }));
+
+        res.status(200).json({ message: "Acesso concedido com sucesso." });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Erro ao conceder acesso." });
+    }
+};
+
+export const revokeAudiobookAccess = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { userIds } = req.body;
+
+        if (!Array.isArray(userIds) || userIds.length === 0) {
+            return res.status(400).json({ message: "userIds deve ser um array não vazio." });
+        }
+
+        const audiobook = await db.audiobooks.findByPk(id);
+        if (!audiobook) {
+            return res.status(404).json({ message: "Audiobook não encontrado." });
+        }
+
+        await db.permissions.destroy({
+            where: {
+                userId: userIds,
+                audiobookId: id
+            }
+        });
+
+        res.status(200).json({ message: "Acesso revogado com sucesso." });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Erro ao revogar acesso." });
     }
 };
 
