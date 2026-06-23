@@ -1,87 +1,465 @@
-/* 1. Reset Básico e Fonte */
+/* 1. Reset & Base */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background: radial-gradient(circle at top left, #eff6ff 0%, #f8fafc 42%, #e2e8f0 100%);
+    color: #0f172a;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* 2. Fundo e Centralização Mágica */
-body {
-    background-color: #f0f2f5; /* Um cinza azulado bem suave */
-    height: 100vh; /* Ocupa 100% da altura da tela */
+body.auth-page {
     display: flex;
-    justify-content: center; /* Centraliza na horizontal */
-    align-items: center; /* Centraliza na vertical */
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
 }
 
-/* 3. O Cartão do Formulário */
-form {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 12px; /* Deixa as quinas redondinhas */
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Sombra elegante */
+body.dashboard-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 16px 24px;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+.container {
     width: 100%;
-    max-width: 400px; /* Impede que o form fique gigante em telas grandes */
-    display: flex;
-    flex-direction: column; /* Coloca um campo embaixo do outro */
-    gap: 20px; /* Dá um respiro entre os campos */
+    max-width: 440px;
+    margin: 0 auto;
 }
 
-/* Estilo para os títulos dentro do form */
-form h2 {
+.auth-page .container {
+    background: #ffffff;
+    border-radius: 28px;
+    box-shadow: 0 28px 80px rgba(15, 23, 42, 0.12);
+    padding: 36px 32px;
+}
+
+.auth-page h2 {
+    color: #0f172a;
+    font-size: 2rem;
+    margin-bottom: 22px;
     text-align: center;
-    color: #333333;
-    margin-bottom: 10px;
 }
 
-/* 4. Estilizando os Inputs (Campos de texto) */
-input {
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+label {
+    color: #475569;
+    font-size: 0.95rem;
+}
+
+input,
+select {
     width: 100%;
-    padding: 12px 16px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: border-color 0.3s ease; /* A transição suave que mencionei */
-    outline: none; /* Remove aquela borda azul feia padrão do navegador */
+    padding: 14px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 16px;
+    background: #f8fafc;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* O efeito de "foco": quando o usuário clica dentro da caixa */
-input:focus {
-    border-color: #4a90e2; /* Uma cor azul vibrante */
+input:focus,
+select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.16);
+    outline: none;
 }
 
-/* 5. Estilizando o Botão */
 button {
-    width: 100%;
-    padding: 12px;
-    background-color: #4a90e2; /* Azul profissional */
-    color: white;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 18px;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
+    border-radius: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-/* Efeito quando o usuário passa o mouse por cima do botão */
 button:hover {
-    background-color: #357abd; /* Um azul um pouco mais escuro */
+    transform: translateY(-1px);
+}
+
+.primary-button {
+    width: 100%;
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 16px 28px rgba(37, 99, 235, 0.18);
+}
+
+.secondary-button {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #dbeafe;
+}
+
+.danger-button {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.small-button {
+    padding: 10px 14px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    min-width: fit-content;
 }
 
 .form-message {
     font-size: 0.95rem;
     min-height: 1.4rem;
-    margin-top: -10px;
-    margin-bottom: 10px;
+    text-align: center;
+    color: #334155;
     padding: 0 4px;
 }
 
 .form-message.success {
-    color: #1d7a3f;
+    color: #166534;
 }
 
 .form-message.error {
-    color: #b02a37;
+    color: #b91c1c;
+}
+
+p {
+    margin-top: 18px;
+    text-align: center;
+    color: #475569;
+}
+
+.dashboard-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.dashboard-header h1 {
+    font-size: 2rem;
+    color: #111827;
+}
+
+.logout-button {
+    background: #ef4444;
+    color: #ffffff;
+    padding: 12px 18px;
+    border-radius: 999px;
+    box-shadow: 0 16px 32px rgba(239, 68, 68, 0.18);
+}
+
+.dashboard-main {
+    display: grid;
+    grid-template-columns: 1.75fr 1fr;
+    gap: 24px;
+    align-items: start;
+    width: 100%;
+}
+
+.dashboard-card,
+.admin-panel {
+    background: #ffffff;
+    border-radius: 28px;
+    box-shadow: 0 28px 80px rgba(15, 23, 42, 0.08);
+    padding: 26px;
+}
+
+.admin-panel h2,
+#audiobookList h2 {
+    font-size: 1.5rem;
+    margin-bottom: 18px;
+    color: #111827;
+}
+
+.upload-form,
+.permission-panel {
+    display: grid;
+    gap: 18px;
+}
+
+.upload-progress {
+    width: 100%;
+    height: 12px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    overflow: hidden;
+}
+
+.permission-row {
+    display: grid;
+    gap: 16px;
+}
+
+.permission-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.permission-field label {
+    font-weight: 700;
+    color: #334155;
+}
+
+.permission-action-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.users-wrapper {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 22px;
+    padding: 18px;
+    max-height: 360px;
+    overflow: auto;
+}
+
+.users-list {
+    display: grid;
+    gap: 14px;
+}
+
+.user-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    background: #ffffff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-row:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+}
+
+.user-row-access {
+    background: #ecfdf5;
+    border-color: #bbf7d0;
+}
+
+.user-card-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    color: #0f172a;
+    font-size: 0.95rem;
+}
+
+.user-card-label input {
+    accent-color: #2563eb;
+}
+
+.user-row span {
+    white-space: nowrap;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #475569;
+}
+
+#permissionMessage {
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: #f8fafc;
+    border: 1px solid #dbeafe;
+    color: #334155;
+    min-height: 52px;
+}
+
+#booksContainer {
+    list-style: none;
+    display: grid;
+    gap: 18px;
+    padding: 0;
+}
+
+.book-card {
+    display: grid;
+    gap: 14px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    background: #f8fbff;
+}
+
+.book-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.book-card-header strong {
+    font-size: 1.05rem;
+    color: #0f172a;
+}
+
+.book-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.track-list {
+    display: grid;
+    gap: 10px;
+    padding-left: 18px;
+}
+
+.track-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #334155;
+    font-size: 0.95rem;
+}
+
+.track-item a {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.track-item a:hover {
+    text-decoration: underline;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+.bg-pending {
+    background: #f59e0b;
+}
+
+.bg-processing {
+    background: #3b82f6;
+}
+
+.bg-completed {
+    background: #10b981;
+}
+
+.bg-failed {
+    background: #ef4444;
+}
+
+.audio-player {
+    position: fixed;
+    bottom: 18px;
+    left: 18px;
+    right: 18px;
+    background: rgba(15, 23, 42, 0.96);
+    color: #ffffff;
+    padding: 18px 24px;
+    border-radius: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px;
+    z-index: 50;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
+    backdrop-filter: blur(10px);
+}
+
+.audio-player #nowPlaying {
+    flex: 1;
+    min-width: 180px;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.audio-player audio {
+    width: 100%;
+    min-width: 220px;
+    border-radius: 18px;
+    background: #ffffff;
+}
+
+@media (max-width: 980px) {
+    .dashboard-main {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    body.auth-page,
+    body.dashboard-page {
+        padding: 18px;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: left;
+    }
+
+    .logout-button {
+        width: 100%;
+    }
+
+    .audio-player {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        padding: 16px;
+    }
 }

@@ -1,6 +1,7 @@
 const token = localStorage.getItem("jwToken");
 let currentUserRole = "user";
 let allAudiobooks = [];
+let allUsers = [];
 let audiobookUsers = [];
 let usersCollapsed = false;
 
@@ -28,7 +29,10 @@ async function getUserData() {
             if (currentUserRole === "admin") {
                 document.getElementById("adminPanel").style.display = "block";
             }
-
+            if (currentUserRole === "admin") {
+                await fetchAllUsers();
+            }
+            await fetchAllUsers();
             await fetchAudiobooks();
         } else {
             localStorage.removeItem("jwToken");
@@ -51,25 +55,25 @@ async function fetchAudiobooks() {
 
         books.forEach(book => {
             const li = document.createElement("li");
-            li.style.cssText = "background: #fff; padding: 15px; margin-bottom: 10px; border-radius: 8px;";
+            li.className = "book-card";
             
             let html = `
-                <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                <div class="book-card-header">
                     <strong>${book.title}</strong>
                     <span class="badge bg-${book.status}">${book.status}</span>
                 </div>
             `;
 
             if (currentUserRole === "admin" && book.status === "pending") {
-                html += `<button onclick="processBook(${book.id})" style="margin-top: 10px; padding: 5px 10px; font-size: 12px; width: auto;">Processar Áudio</button>`;
+                html += `<div class="book-actions"><button onclick="processBook(${book.id})" class="secondary-button small-button">Processar Áudio</button></div>`;
             }
 
             if (book.status === "completed" && book.tracks && book.tracks.length > 0) {
-                html += `<ul style="margin-top: 10px; font-size: 14px;">`;
+                html += `<div class="track-list">`;
                 book.tracks.forEach(track => {
-                    html += `<li>🎵 ${track.title} - <a href="#" onclick="playTrack('${track.file_path}', '${track.title}')">Ouvir</a></li>`;
+                    html += `<div class="track-item">🎵 <span>${track.title}</span> <a href="#" onclick="playTrack('${track.file_path}', '${track.title}')">Ouvir</a></div>`;
                 });
-                html += `</ul>`;
+                html += `</div>`;
             }
 
             li.innerHTML = html;
@@ -95,10 +99,38 @@ async function fetchAudiobookUsers(audiobookId) {
         }
 
         audiobookUsers = await res.json();
+        if (!audiobookUsers.length && allUsers.length) {
+            audiobookUsers = allUsers;
+        }
         renderUserCheckboxes();
     } catch (error) {
         console.error(error);
         document.getElementById("permissionMessage").innerText = "Erro ao carregar usuários do audiobook.";
+        audiobookUsers = allUsers;
+        renderUserCheckboxes();
+    }
+}
+
+async function fetchAllUsers() {
+    try {
+        const res = await fetch("http://localhost:3000/api/audiobooks/users", {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+        if (!res.ok) {
+            throw new Error("Falha ao carregar todos os usuários.");
+        }
+        allUsers = await res.json();
+        if (!audiobookUsers.length || audiobookUsers.length === 0) {
+            audiobookUsers = allUsers;
+            renderUserCheckboxes();
+        }
+    } catch (error) {
+        console.error(error);
+        document.getElementById("permissionMessage").innerText = "Erro ao carregar lista de usuários.";
+        if (allUsers.length) {
+            audiobookUsers = allUsers;
+            renderUserCheckboxes();
+        }
     }
 }
 
@@ -114,28 +146,20 @@ function renderUserCheckboxes(filter = "") {
     });
 
     if (filteredUsers.length === 0) {
-        usersList.innerHTML = `<div style="padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px; color: #7f8c8d; background: #fafafa;">Nenhum usuário encontrado.</div>`;
+        usersList.innerHTML = `<div class="user-row"><span>Nenhum usuário encontrado.</span></div>`;
         return;
     }
 
     filteredUsers.forEach(user => {
         const div = document.createElement("div");
-        div.style.display = "flex";
-        div.style.justifyContent = "space-between";
-        div.style.alignItems = "center";
-        div.style.padding = "10px";
-        div.style.border = "1px solid #e0e0e0";
-        div.style.borderRadius = "6px";
-        div.style.background = user.hasAccess ? "#f0fff5" : "#fafafa";
+        div.className = `user-row${user.hasAccess ? ' user-row-access' : ''}`;
 
         div.innerHTML = `
-            <label style="display: flex; align-items: center; gap: 8px; flex: 1;">
+            <label class="user-card-label">
                 <input type="checkbox" name="permissionUser" value="${user.id}">
                 <span>${user.fullName} (${user.email})</span>
             </label>
-            <span style="font-size: 12px; color: ${user.hasAccess ? '#2ecc71' : '#7f8c8d'}; white-space: nowrap;">
-                ${user.hasAccess ? 'Acesso: Sim' : 'Acesso: Não'}
-            </span>
+            <span>${user.hasAccess ? 'Acesso: Sim' : 'Acesso: Não'}</span>
         `;
 
         usersList.appendChild(div);
@@ -154,8 +178,11 @@ function populateAudiobookSelect() {
         select.appendChild(option);
     });
 
-    if (select.value) {
+    if (select.options.length > 0) {
         fetchAudiobookUsers(Number(select.value));
+    } else {
+        audiobookUsers = allUsers;
+        renderUserCheckboxes();
     }
 }
 

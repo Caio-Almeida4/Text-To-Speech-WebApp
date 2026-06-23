@@ -78,24 +78,22 @@ export const getAudiobookUsers = async (req, res) => {
         }
 
         const users = await db.users.findAll({
-            attributes: ["id", "fullName", "email", "role"],
-            include: [
-                {
-                    model: db.audiobooks,
-                    attributes: ["id"],
-                    through: { attributes: [] },
-                    where: { id },
-                    required: false
-                }
-            ]
+            attributes: ["id", "fullName", "email", "role"]
         });
+
+        const permissions = await db.permissions.findAll({
+            where: { audiobookId: id },
+            attributes: ["userId"]
+        });
+
+        const accessIds = new Set(permissions.map(permission => permission.userId));
 
         const usersWithAccess = users.map(user => ({
             id: user.id,
             fullName: user.fullName,
             email: user.email,
             role: user.role,
-            hasAccess: user.audiobooks && user.audiobooks.length > 0
+            hasAccess: accessIds.has(user.id)
         }));
 
         res.status(200).json(usersWithAccess);

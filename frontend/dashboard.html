@@ -2,65 +2,57 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* CSS Adicional para o Player Fixo e Badges */
-        .audio-player { position: fixed; bottom: 0; left: 0; width: 100%; background: #333; color: #fff; padding: 15px; display: flex; align-items: center; gap: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.5); }
-        .audio-player audio { width: 100%; max-width: 500px; }
-        .badge { padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; color: white; }
-        .bg-pending { background-color: #f39c12; }
-        .bg-processing { background-color: #3498db; }
-        .bg-completed { background-color: #2ecc71; }
-        .bg-failed { background-color: #e74c3c; }
-        .admin-panel { margin-top: 20px; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    </style>
 </head>
-<body style="display: none; flex-direction: column; justify-content: flex-start; padding: 20px;">
+<body class="dashboard-page" style="display: none;">
 
-    <div style="display: flex; justify-content: space-between; width: 100%; max-width: 800px; align-items: center;">
+    <div class="dashboard-header">
         <h1 id="welcomeMessage">Carregando...</h1>
-        <button id="logoutBtn" style="width: auto;">Logout</button>
+        <button id="logoutBtn" class="logout-button">Logout</button>
     </div>
 
-    <div id="adminPanel" class="admin-panel" style="display: none; width: 100%; max-width: 800px;">
-        <h2>Painel do Administrador - Upload de PDF</h2>
-        <form id="uploadForm">
-            <input type="file" id="pdfFiles" accept=".pdf" multiple required>
-            <button type="submit" style="margin-top: 10px;">Fazer Upload</button>
-            <progress id="uploadProgress" value="0" max="100" style="width: 100%; display: none; margin-top:10px;"></progress>
-        </form>
+    <main class="dashboard-main">
+        <div id="audiobookList" class="dashboard-card">
+            <h2>Biblioteca de Audiobooks</h2>
+            <ul id="booksContainer"></ul>
+        </div>
 
-        <div id="permissionPanel" style="margin-top: 30px;">
-            <h3>Gerenciar Acesso a Audiobooks</h3>
-            <div id="permissionMessage" style="margin-bottom: 12px; color: #333;"></div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
-                <div style="flex: 1; min-width: 240px;">
-                    <label for="audiobookSelect">Audiobook</label><br>
-                    <select id="audiobookSelect" style="width: 100%; padding: 8px; margin-top: 6px;"></select>
+        <div id="adminPanel" class="admin-panel" style="display: none;">
+            <h2>Painel do Administrador - Upload de PDF</h2>
+            <form id="uploadForm" class="upload-form">
+                <input type="file" id="pdfFiles" accept=".pdf" multiple required>
+                <button type="submit" class="primary-button">Fazer Upload</button>
+                <progress id="uploadProgress" value="0" max="100" class="upload-progress"></progress>
+            </form>
+
+            <div id="permissionPanel" class="permission-panel">
+                <h3>Gerenciar Acesso a Audiobooks</h3>
+                <div id="permissionMessage" class="permission-message"></div>
+                <div class="permission-row">
+                    <div class="permission-field">
+                        <label for="audiobookSelect">Audiobook</label>
+                        <select id="audiobookSelect"></select>
+                    </div>
                 </div>
-            </div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-top: 16px;">
-                <div style="flex: 1; min-width: 240px;">
-                    <label for="userSearch">Buscar usuário</label><br>
-                    <input id="userSearch" type="text" placeholder="Nome ou e-mail" style="width: 100%; padding: 8px; margin-top: 6px;" />
+                <div class="permission-row">
+                    <div class="permission-field">
+                        <label for="userSearch">Buscar usuário</label>
+                        <input id="userSearch" type="text" placeholder="Nome ou e-mail" />
+                    </div>
+                    <button id="toggleUsersBtn" type="button" class="secondary-button small-button">Ocultar lista</button>
                 </div>
-                <button id="toggleUsersBtn" type="button" style="flex: 0 0 auto; min-width: 150px; background: #3498db; color: white;">Ocultar lista</button>
-            </div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;">
-                <button id="grantAccessBtn" type="button" style="flex: 1; min-width: 150px;">Conceder acesso</button>
-                <button id="revokeAccessBtn" type="button" style="flex: 1; min-width: 150px; background: #e74c3c; color: white;">Revogar acesso</button>
-            </div>
-            <div id="usersWrapper" style="margin-top: 16px; display: block;">
-                <div id="usersList" style="display: grid; gap: 6px;"></div>
+                <div class="permission-action-row">
+                    <button id="grantAccessBtn" type="button" class="primary-button small-button">Conceder acesso</button>
+                    <button id="revokeAccessBtn" type="button" class="danger-button small-button">Revogar acesso</button>
+                </div>
+                <div id="usersWrapper" class="users-wrapper">
+                    <div id="usersList" class="users-list"></div>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div id="audiobookList" style="width: 100%; max-width: 800px; margin-top: 20px;">
-        <h2>Biblioteca de Audiobooks</h2>
-        <ul id="booksContainer" style="list-style: none; padding: 0;"></ul>
-    </div>
+    </main>
 
     <div class="audio-player" id="audioPlayerContainer" style="display: none;">
         <div id="nowPlaying">Nenhuma faixa selecionada</div>
